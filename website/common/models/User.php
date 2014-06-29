@@ -185,6 +185,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function updateLastLogin()
     {
+        $this->detachBehavior('timestamp');
         $this->lastLogin = new Expression('NOW()');
         $this->save();
     }
