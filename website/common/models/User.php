@@ -20,6 +20,7 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $lastCreated
  * @property integer $lastUpdated
+ * @property integer $lastLogin
  * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -177,5 +178,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->passwordResetToken = null;
+    }
+
+    /**
+     * Update last logging in time
+     */
+    public function updateLastLogin()
+    {
+        $this->lastLogin = new Expression('NOW()');
+        $this->save();
     }
 }
