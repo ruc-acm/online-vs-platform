@@ -1,10 +1,10 @@
 <?php
 namespace common\models;
 
+use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use yii\helpers\Security;
 use yii\web\IdentityInterface;
 
 /**
@@ -95,7 +95,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByPasswordResetToken($token)
     {
-        $expire = \Yii::$app->params['user.passwordResetTokenExpire'];
+        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         $parts = explode('_', $token);
         $timestamp = (int)end($parts);
         if ($timestamp + $expire < time()) {
@@ -143,7 +143,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validatePassword($password)
     {
-        return Security::validatePassword($password, $this->passwordHash);
+        return Yii::$app->getSecurity()->validatePassword($password, $this->passwordHash);
     }
 
     /**
@@ -153,7 +153,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function setPassword($password)
     {
-        $this->passwordHash = Security::generatePasswordHash($password);
+        $this->passwordHash = Yii::$app->getSecurity()->generatePasswordHash($password);
     }
 
     /**
@@ -161,7 +161,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function generateAuthKey()
     {
-        $this->authKey = Security::generateRandomKey();
+        $this->authKey = Yii::$app->getSecurity()->generateRandomKey();
     }
 
     /**
@@ -169,7 +169,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function generatePasswordResetToken()
     {
-        $this->passwordResetToken = Security::generateRandomKey() . '_' . time();
+        $this->passwordResetToken = Yii::$app->getSecurity()->generateRandomKey() . '_' . time();
     }
 
     /**
