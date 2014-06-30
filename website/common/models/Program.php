@@ -21,9 +21,9 @@ use yii\db\Expression;
  */
 class Program extends ActiveRecord
 {
-    const STABILITY_STABLE = 1;
-    const STABILITY_BETA = 2;
-    const STABILITY_ALPHA = 3;
+    const STABILITY_STABLE = 0;
+    const STABILITY_BETA = 1;
+    const STABILITY_ALPHA = 2;
     const STABILITY_DEVELOPMENT = 10;
 
     /**
