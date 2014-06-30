@@ -8,7 +8,6 @@ use common\models\Program;
 use yii\grid\DataColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 $this->title = 'My AI';
 $this->params['breadcrumbs'][] = $this->title;
@@ -30,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'name',
                         'enableSorting' => true,
                         'content' => function ($model) {
-                                return Html::a(Html::encode($model->name) ,['view', 'id' => $model->id]);
+                                return Html::a(Html::encode($model->name), ['view', 'id' => $model->id]);
                             },
                     ],
                     [
@@ -39,16 +38,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'stability',
                         'enableSorting' => true,
                         'content' => function ($model) {
+                                $class = 'label-default';
+                                $text = 'dev';
                                 switch ($model->stability) {
                                     case Program::STABILITY_STABLE:
-                                        return 'Stable';
+                                        $class = 'label-success';
+                                        $text = 'stable';
+                                        break;
                                     case Program::STABILITY_BETA:
-                                        return 'Beta';
-                                    case Program::STABILITY_ALPHA;
-                                        return 'Alpha';
-                                    default:
-                                        return 'Development';
+                                        $class = 'label-warning';
+                                        $text = 'beta';
+                                        break;
+                                    case Program::STABILITY_ALPHA:
+                                        $class = 'label-danger';
+                                        $text = 'alpha';
+                                        break;
                                 }
+                                return '<span class="label ' . $class . '">' . $text . '</span>';
                             },
                     ],
                     'lastCreated',
