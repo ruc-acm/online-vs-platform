@@ -21,6 +21,14 @@ class UserScore extends ActiveRecord
     /**
      * @inheritdoc
      */
+    public static function tableName()
+    {
+        return '{{%userScore}}';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [

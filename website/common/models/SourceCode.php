@@ -24,7 +24,7 @@ class SourceCode extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'sourceCode';
+        return '{{%sourceCode}}';
     }
 
     /**
