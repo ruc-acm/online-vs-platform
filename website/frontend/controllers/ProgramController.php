@@ -49,6 +49,7 @@ class ProgramController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Yii::$app->user->identity->getPrograms(),
+            'sort'=> ['defaultOrder' => ['id' => SORT_DESC] ],
         ]);
 
         return $this->render(
