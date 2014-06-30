@@ -8,6 +8,7 @@ use common\models\Program;
 use yii\grid\DataColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'My AI';
 $this->params['breadcrumbs'][] = $this->title;
@@ -23,7 +24,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'dataProvider' => $dataProvider,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-                    'name:ntext',
+                    [
+                        'class' => DataColumn::className(),
+                        'label' => 'Name',
+                        'attribute' => 'name',
+                        'enableSorting' => true,
+                        'content' => function ($model) {
+                                return Html::a(Html::encode($model->name) ,['view', 'id' => $model->id]);
+                            },
+                    ],
                     [
                         'class' => DataColumn::className(),
                         'label' => 'Stability',
