@@ -22,6 +22,7 @@ use yii\web\IdentityInterface;
  * @property integer $lastUpdated
  * @property integer $lastLogin
  * @property string $password write-only password
+ * @property Program[] $programs
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -188,5 +189,13 @@ class User extends ActiveRecord implements IdentityInterface
         $this->detachBehavior('timestamp');
         $this->lastLogin = new Expression('NOW()');
         $this->save();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPrograms()
+    {
+        return $this->hasMany(Program::className(), ['userId' => 'id']);
     }
 }
