@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\redis\Connection;
 
 class CompetitionController extends Controller
 {
@@ -56,6 +57,10 @@ class CompetitionController extends Controller
             $record->status = ExecutionRecord::STATUS_PENDING;
             $record->winner = 0;
             $record->save();
+            $redis = new Connection();
+            $redis->open();
+            $redis->executeCommand('RPUSH',['judge_queue' , $record->id]);
+            $redis->close();
             Yii::$app->session->setFlash('success', 'Your request has been submitted.');
             return $this->redirect(['status']);
         }
