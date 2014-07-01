@@ -8,9 +8,9 @@ use common\models\Program;
 use common\models\SourceCode;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
-use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -49,7 +49,7 @@ class ProgramController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Yii::$app->user->identity->getPrograms(),
-            'sort'=> ['defaultOrder' => ['id' => SORT_DESC] ],
+            'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
         ]);
 
         return $this->render(
@@ -87,7 +87,7 @@ class ProgramController extends Controller
 
     public function actionView($id)
     {
-        $program = Program::find($id)->with('sourceCode')->one();
+        $program = Program::findOne($id);
         if ($program == null) {
             throw new NotFoundHttpException();
         }

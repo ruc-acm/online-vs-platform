@@ -37,7 +37,7 @@ AppAsset::register($this);
     );
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Games', 'url' => ['/games/index']],
+        ['label' => 'Games', 'url' => ['/game/index']],
         ['label' => 'Status', 'url' => ['/competition/status']],
         ['label' => 'My AI', 'url' => ['/program/index']],
         ['label' => 'Compete', 'url' => ['/competition/index']],
