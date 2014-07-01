@@ -4,7 +4,6 @@
  * @var yii\data\ActiveDataProvider $dataProvider
  */
 use common\models\ExecutionRecord;
-use common\models\User;
 use yii\grid\DataColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -27,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'attackerId',
                     'enableSorting' => false,
                     'content' => function ($model) {
-                            return $model->attacker->username;
+                            return $model->attacker->profile->nickName;
                         },
                 ],
                 [
@@ -36,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'defenderId',
                     'enableSorting' => false,
                     'content' => function ($model) {
-                            return $model->defender->username;
+                            return $model->defender->profile->nickName;
                         },
                 ],
                 [
