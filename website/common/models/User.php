@@ -198,4 +198,24 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Program::className(), ['userId' => 'id']);
     }
+
+    /**
+     * get the program that is used to defend others' attack.
+     * returns null if none found.
+     * @return \common\models\Program
+     */
+    public function getFlagshipProgram()
+    {
+        return $this->getPrograms()->orderBy(['stability' => 'DESC', 'lastCreated' => 'DESC'])->limit(1)->one();
+    }
+
+    /**
+     * get the program that is used to attack others.
+     * returns null if none found.
+     * @return \common\models\Program
+     */
+    public function getLatestProgram()
+    {
+        return $this->getPrograms()->orderBy(['lastCreated' => 'DESC'])->limit(1)->one();
+    }
 }

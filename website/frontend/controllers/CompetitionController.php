@@ -4,8 +4,8 @@ namespace frontend\controllers;
 use common\models\ExecutionRecord;
 use common\models\UserScore;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
 use Yii;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 class CompetitionController extends Controller
@@ -24,7 +24,7 @@ class CompetitionController extends Controller
     public function actionStatus()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => ExecutionRecord::find()->with(['attacker','defender']),
+            'query' => ExecutionRecord::find()->with(['attacker', 'defender']),
             'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
         ]);
         return $this->render('status', ['dataProvider' => $dataProvider]);
@@ -40,6 +40,14 @@ class CompetitionController extends Controller
             $record = new ExecutionRecord();
             $record->attackerId = $user->getId();
             $record->defenderId = $id;
+            if ($record->attacker->getLatestProgram() == null) {
+                Yii::$app->session->setFlash('error', 'You has not uploaded any AI yet.');
+                return $this->redirect(['index']);
+            }
+            if ($record->defender->getFlagshipProgram() == null) {
+                Yii::$app->session->setFlash('error', 'Your opponent has not uploaded any AI yet.');
+                return $this->redirect(['index']);
+            }
             $record->status = ExecutionRecord::STATUS_PENDING;
             $record->winner = 0;
             $record->save();
