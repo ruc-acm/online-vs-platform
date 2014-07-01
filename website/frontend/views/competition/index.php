@@ -37,7 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'content' => function ($model) {
                             return Html::a(
                                 'Compete',
-                                ['compete', 'id' => $model->user->id]
+                                ['compete', 'id' => $model->user->id],
+                                ['data-method' => 'post']
                             );
                         },
                 ],
