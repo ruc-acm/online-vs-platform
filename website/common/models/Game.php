@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
  *
  * @property integer $id
  * @property string $name
+ * @property string $displayName
  *
  * @property Program[] $programs
  * @property UserScore[] $userScores
@@ -23,9 +24,9 @@ class Game extends ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'name'], 'required'],
+            [['id', 'name', 'displayName'], 'required'],
             [['id'], 'integer'],
-            [['name'], 'string', 'max' => 255]
+            [['name', 'displayName'], 'string', 'max' => 255]
         ];
     }
 
@@ -37,6 +38,7 @@ class Game extends ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'displayName' => 'Display Name',
         ];
     }
 
