@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use common\models\LoginForm;
+use frontend\models\ChangePasswordForm;
 use frontend\models\ContactForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
@@ -143,6 +144,23 @@ class SiteController extends Controller
 
         return $this->render(
             'signup',
+            [
+                'model' => $model,
+            ]
+        );
+    }
+
+
+    public function actionChangePassword()
+    {
+        $model = new ChangePasswordForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->changePassword()) {
+                return $this->actionLogout();
+            }
+        }
+        return $this->render(
+            'changePassword',
             [
                 'model' => $model,
             ]

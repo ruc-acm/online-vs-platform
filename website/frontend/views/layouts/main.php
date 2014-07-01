@@ -52,6 +52,10 @@ AppAsset::register($this);
             'items' =>
                 [
                     [
+                        'label' => 'Change Password',
+                        'url' => ['/site/change-password'],
+                    ],
+                    [
                         'label' => 'Logout',
                         'url' => ['/site/logout'],
                         'linkOptions' => ['data-method' => 'post'],
