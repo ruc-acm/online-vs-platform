@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             SourceCode::LANGUAGE_CPP => 'C++'
         ]
     ) ?>
-    <?= $form->field($code, 'code')->textarea() ?>
+    <?= $form->field($code, 'code')->textarea(['rows' => 10]) ?>
     <div class="form-group">
         <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'submit-button']) ?>
     </div>
