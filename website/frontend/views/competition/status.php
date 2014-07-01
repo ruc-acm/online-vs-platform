@@ -63,17 +63,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     'content' => function ($model) {
                             switch ($model->status) {
                                 case ExecutionRecord::STATUS_PENDING:
-                                    return 'Pending';
+                                    return '<span style="color: #00CCFF">Pending</span>';
                                 case ExecutionRecord::STATUS_RUNNING:
-                                    return 'Running';
+                                    return '<span style="color: #faff43">Running</span>';
                                 case ExecutionRecord::STATUS_FINISHED:
-                                    return 'Finished';
+                                    return '<span style="color: #009900">Finished</span>';
                                 case ExecutionRecord::STATUS_RUNTIME_ERROR:
-                                    return 'Runtime Error';
+                                    return '<span style="color: #bb0000">Runtime Error</span>';
                                 case ExecutionRecord::STATUS_TLE:
-                                    return 'Time Limit Exceeded';
+                                    return '<span style="color: #bb065c">Time Limit Exceeded</span>';
+                                case ExecutionRecord::STATUS_BAD_FORMAT:
+                                    return '<span style="color: #a45c00">Bad Output</span>';
+                                case ExecutionRecord::STATUS_ILLEGAL_MOVE:
+                                    return '<span style="color: #8e5866">Illegal Movement</span>';
                                 case ExecutionRecord::STATUS_INTERNAL_ERROR:
-                                    return 'Internal Error';
+                                    return '<span style="color: #233333">Internal Error</span>';
                                 default:
                                     return '-';
                             }
