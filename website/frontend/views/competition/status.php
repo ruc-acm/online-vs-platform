@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'attackerId',
                     'enableSorting' => false,
                     'content' => function ($model) {
-                            return $model->attacker->profile->nickName;
+                            return $model->attacker->user->profile->nickName;
                         },
                 ],
                 [
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'defenderId',
                     'enableSorting' => false,
                     'content' => function ($model) {
-                            return $model->defender->profile->nickName;
+                            return $model->defender->user->profile->nickName;
                         },
                 ],
                 [

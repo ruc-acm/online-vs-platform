@@ -73,7 +73,7 @@ class ExecutionRecord extends ActiveRecord
      */
     public function getDefender()
     {
-        return $this->hasOne(User::className(), ['id' => 'defenderId']);
+        return $this->hasOne(Program::className(), ['id' => 'defenderId']);
     }
 
     /**
@@ -81,6 +81,6 @@ class ExecutionRecord extends ActiveRecord
      */
     public function getAttacker()
     {
-        return $this->hasOne(User::className(), ['id' => 'attackerId']);
+        return $this->hasOne(Program::className(), ['id' => 'attackerId']);
     }
 }

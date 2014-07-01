@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use common\models\ExecutionRecord;
+use common\models\User;
 use common\models\UserScore;
 use yii\data\ActiveDataProvider;
 use Yii;
@@ -24,7 +25,7 @@ class CompetitionController extends Controller
     public function actionStatus()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => ExecutionRecord::find()->with(['attacker', 'defender']),
+            'query' => ExecutionRecord::find()->with(['attacker.user.profile', 'defender.user.profile']),
             'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
         ]);
         return $this->render('status', ['dataProvider' => $dataProvider]);
@@ -32,22 +33,26 @@ class CompetitionController extends Controller
 
     public function actionCompete($id)
     {
-        $user = Yii::$app->user;
-        if ($id == $user->getId()) {
+        $attackerUser = Yii::$app->user->identity;
+        $defenderUser = User::findOne($id);
+        if ($defenderUser == null) {
+            throw new NotFoundHttpException('Specific user cannot be found.');
+        }
+        if ($id == $attackerUser->getId()) {
             Yii::$app->session->setFlash('error', 'You cannot compete with yourself.');
             return $this->redirect(['index']);
         } else {
             $record = new ExecutionRecord();
-            $record->attackerId = $user->getId();
-            $record->defenderId = $id;
-            if ($record->attacker->getLatestProgram() == null) {
+            if (($attacker = $attackerUser->getLatestProgram()) == null) {
                 Yii::$app->session->setFlash('error', 'You has not uploaded any AI yet.');
                 return $this->redirect(['index']);
             }
-            if ($record->defender->getFlagshipProgram() == null) {
+            if (($defender = $defenderUser->getFlagshipProgram()) == null) {
                 Yii::$app->session->setFlash('error', 'Your opponent has not uploaded any AI yet.');
                 return $this->redirect(['index']);
             }
+            $record->attackerId = $attacker->id;
+            $record->defenderId = $defender->id;
             $record->status = ExecutionRecord::STATUS_PENDING;
             $record->winner = 0;
             $record->save();
