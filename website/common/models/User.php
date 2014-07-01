@@ -1,11 +1,11 @@
 <?php
 namespace common\models;
 
-use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
+use Yii;
 
 /**
  * User model
@@ -17,6 +17,7 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property string $authKey
  * @property integer $role
+ * @property UserProfile $profile
  * @property integer $status
  * @property integer $lastCreated
  * @property integer $lastUpdated
@@ -200,6 +201,14 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProfile()
+    {
+        return $this->hasOne(UserProfile::className(), ['userId' => 'id']);
+    }
+
+    /**
      * get the program that is used to defend others' attack.
      * returns null if none found.
      * @return \common\models\Program
@@ -218,4 +227,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->getPrograms()->orderBy(['lastCreated' => 'DESC'])->limit(1)->one();
     }
+
+
 }

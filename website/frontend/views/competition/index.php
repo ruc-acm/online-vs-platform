@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => Column::className(),
                     'header' => 'User',
                     'content' => function ($model) {
-                            return $model->user->username;
+                            return $model->user->profile->nickName;
                         },
                 ],
                 [

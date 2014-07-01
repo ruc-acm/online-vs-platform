@@ -26,9 +26,11 @@ class ExecutionRecord extends ActiveRecord
     const STATUS_RUNTIME_ERROR = 3;
     const STATUS_TLE = 4;
     const STATUS_INTERNAL_ERROR = -1;
+    const STATUS_REJECTED = -2;
 
     const WINNER_ATTACKER = 1;
     const WINNER_DEFENDER = 2;
+
     /**
      * @inheritdoc
      */

@@ -15,6 +15,13 @@ use yii\db\ActiveRecord;
  */
 class UserProfile extends ActiveRecord
 {
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return '{{%userProfile}}';
+    }
 
     /**
      * @inheritdoc
