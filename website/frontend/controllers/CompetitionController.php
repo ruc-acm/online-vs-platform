@@ -14,7 +14,8 @@ class CompetitionController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => UserScore::find(),
+            'query' => UserScore::find()->where(['gameId' => 1])
+                    ->with(['user']),
             'sort' => ['defaultOrder' => ['rating' => SORT_DESC]],
         ]);
         return $this->render('index', ['dataProvider' => $dataProvider]);
@@ -23,7 +24,7 @@ class CompetitionController extends Controller
     public function actionStatus()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => ExecutionRecord::find(),
+            'query' => ExecutionRecord::find()->with(['attacker','defender']),
             'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
         ]);
         return $this->render('status', ['dataProvider' => $dataProvider]);

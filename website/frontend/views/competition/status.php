@@ -12,12 +12,6 @@ use yii\helpers\Html;
 $this->title = 'Status';
 $this->params['breadcrumbs'][] = $this->title;
 
-
-function getUsernameById($id)
-{
-    return User::findOne($id)->username;
-}
-
 ?>
 <div class="competition-status">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -33,7 +27,7 @@ function getUsernameById($id)
                     'attribute' => 'attackerId',
                     'enableSorting' => false,
                     'content' => function ($model) {
-                            return getUsernameById($model->attackerId);
+                            return $model->attacker->username;
                         },
                 ],
                 [
@@ -42,7 +36,7 @@ function getUsernameById($id)
                     'attribute' => 'defenderId',
                     'enableSorting' => false,
                     'content' => function ($model) {
-                            return getUsernameById($model->defenderId);
+                            return $model->defender->username;
                         },
                 ],
                 [
