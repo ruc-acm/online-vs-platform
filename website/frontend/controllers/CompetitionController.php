@@ -52,7 +52,7 @@ class CompetitionController extends Controller
     {
         $record = ExecutionRecord::findOne($id);
         if ($record == null) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('The specific record could not be found.');
         }
         if ($record->status == ExecutionRecord::STATUS_PENDING || ExecutionRecord::STATUS_RUNNING) {
             Yii::$app->session->setFlash('warning', 'Please come back later');

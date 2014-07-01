@@ -8,9 +8,9 @@ use common\models\Program;
 use common\models\SourceCode;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
-use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -89,10 +89,10 @@ class ProgramController extends Controller
     {
         $program = Program::findOne($id);
         if ($program == null) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('The specific record could not be found.');
         }
         if ($program->userId != Yii::$app->user->identity->getId()) {
-            throw new ForbiddenHttpException();
+            throw new ForbiddenHttpException('You can only view your own code.');
         }
         return $this->render('view', ['model' => $program]);
     }

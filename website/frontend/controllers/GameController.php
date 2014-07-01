@@ -25,7 +25,7 @@ class GameController extends Controller
     {
         $game = Game::findOne($id);
         if ($game == null) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('The specific record could not be found.');
         }
         return $this->render('view', ['game' => $game]);
     }
