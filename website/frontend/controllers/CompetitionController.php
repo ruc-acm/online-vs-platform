@@ -4,13 +4,13 @@ namespace frontend\controllers;
 use common\models\ExecutionRecord;
 use common\models\User;
 use common\models\UserScore;
-use yii\data\ActiveDataProvider;
-use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\redis\Connection;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\redis\Connection;
+use Yii;
+use yii\data\ActiveDataProvider;
 
 class CompetitionController extends Controller
 {
@@ -86,7 +86,7 @@ class CompetitionController extends Controller
             $record->save();
             $redis = new Connection();
             $redis->open();
-            $redis->executeCommand('RPUSH',['judge_queue' , $record->id]);
+            $redis->executeCommand('RPUSH', ['judge_queue', $record->id]);
             $redis->close();
             Yii::$app->session->setFlash('success', 'Your request has been submitted.');
             return $this->redirect(['status']);
@@ -99,7 +99,7 @@ class CompetitionController extends Controller
         if ($record == null) {
             throw new NotFoundHttpException('The specific record could not be found.');
         }
-        if ($record->status == ExecutionRecord::STATUS_PENDING || ExecutionRecord::STATUS_RUNNING) {
+        if ($record->status == ExecutionRecord::STATUS_PENDING || $record->status == ExecutionRecord::STATUS_RUNNING) {
             Yii::$app->session->setFlash('warning', 'Please come back later');
             return $this->redirect(['status']);
         }
@@ -107,5 +107,18 @@ class CompetitionController extends Controller
             Yii::$app->session->setFlash('error', 'This execution did not finish.');
             return $this->redirect(['status']);
         }
+    }
+
+    public function actionDetail($id)
+    {
+        $record = ExecutionRecord::findOne($id);
+        if ($record == null) {
+            throw new NotFoundHttpException('The specific record could not be found.');
+        }
+        if ($record->status == ExecutionRecord::STATUS_PENDING || $record->status == ExecutionRecord::STATUS_RUNNING) {
+            Yii::$app->session->setFlash('warning', 'Please come back later');
+            return $this->redirect(['status']);
+        }
+        return $this->render('detail', ['model' => $record]);
     }
 }

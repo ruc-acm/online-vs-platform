@@ -4,6 +4,7 @@
  * @var yii\data\ActiveDataProvider $dataProvider
  */
 use common\models\ExecutionRecord;
+use yii\grid\Column;
 use yii\grid\DataColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -19,7 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'dataProvider' => $dataProvider,
             'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'class' => DataColumn::className(),
+                    'label' => 'Run ID',
+                    'attribute' => 'id',
+                    'enableSorting' => false,
+                ],
                 [
                     'class' => DataColumn::className(),
                     'label' => 'Attacker',
@@ -77,12 +83,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return '<span style="color: #8e5866">Illegal Movement</span>';
                                 case ExecutionRecord::STATUS_INTERNAL_ERROR:
                                     return '<span style="color: #233333">Internal Error</span>';
+                                case ExecutionRecord::STATUS_COMPILE_ERROR:
+                                    return '<span style="color: #ff5410;">Compile Error</span>';
                                 default:
                                     return '-';
                             }
 
                         },
                 ],
+                [
+                    'class' => Column::className(),
+                    'header' => 'Actions',
+                    'content' =>
+                        function ($model) {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-play"></span> Replay',
+                                ['replay', 'id' => $model->id],
+                                ['class' => 'btn btn-default btn-xs']
+                            ) . '' . Html::a(
+                                '<span class="glyphicon glyphicon-eye-open"></span> Detail',
+                                ['detail', 'id' => $model->id],
+                                ['class' => 'btn btn-default btn-xs']
+                            );
+                        }
+                ]
             ]
         ]
     ) ?>

@@ -2,8 +2,9 @@
 
 namespace common\models;
 
-use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use Yii;
 
 /**
  * This is the model class for table "executionRecord".
@@ -14,9 +15,10 @@ use yii\db\ActiveRecord;
  * @property integer $winner
  * @property string $replay
  * @property integer $status
- *
- * @property User $defender
- * @property User $attacker
+ * @property string $submitted
+ * @property string $log
+ * @property Program $defender
+ * @property Program $attacker
  */
 class ExecutionRecord extends ActiveRecord
 {
@@ -27,9 +29,10 @@ class ExecutionRecord extends ActiveRecord
     const STATUS_TLE = 4;
     const STATUS_ILLEGAL_MOVE = 5;
     const STATUS_BAD_FORMAT = 6;
+    const STATUS_COMPILE_ERROR = 7;
     const STATUS_INTERNAL_ERROR = -1;
     const STATUS_REJECTED = -2;
-    
+
     const WINNER_ATTACKER = 1;
     const WINNER_DEFENDER = 2;
 
@@ -56,6 +59,22 @@ class ExecutionRecord extends ActiveRecord
     /**
      * @inheritdoc
      */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['submitted'],
+                ],
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function attributeLabels()
     {
         return [
@@ -65,6 +84,7 @@ class ExecutionRecord extends ActiveRecord
             'winner' => 'Winner',
             'replay' => 'Replay',
             'status' => 'Status',
+            'submitted' => 'Submitted Time'
         ];
     }
 
