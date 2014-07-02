@@ -2,6 +2,8 @@
 namespace frontend\models;
 
 use common\models\User;
+use common\models\UserProfile;
+use common\models\UserScore;
 use yii\base\Model;
 use Yii;
 
@@ -48,7 +50,15 @@ class SignupForm extends Model
             $user->email = $this->email;
             $user->setPassword($this->password);
             $user->generateAuthKey();
+            $profile = new UserProfile();
+            $profile->nickName = ucfirst($user->username);
+            $score = new UserScore();
+            $score->gameId = 1; //TODO: add multi-game support
             $user->save();
+            $profile->link('user',$user);
+            $score->link('user',$user);
+            $user->link('profile', $profile);
+            $user->link('score',$score);
             return $user;
         }
 

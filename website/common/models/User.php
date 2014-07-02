@@ -1,11 +1,11 @@
 <?php
 namespace common\models;
 
+use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
-use Yii;
 
 /**
  * User model
@@ -206,6 +206,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function getProfile()
     {
         return $this->hasOne(UserProfile::className(), ['userId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getScore()
+    {
+        return $this->hasMany(UserScore::className(), ['userId' => 'id']);
     }
 
     /**
