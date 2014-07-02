@@ -20,7 +20,7 @@ class UserProgram:
         self.process = Popen(self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
     def start_timer(self):
-        self.timer = Timer(self.timeout, lambda: self.time_limit_exceeded())
+        self.timer = Timer(self.timeout, self.time_limit_exceeded)
         self.timer.start()
 
     def stop_timer(self):
