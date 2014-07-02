@@ -22,8 +22,9 @@ class JudgeClientException(Exception):
 
 
 class ExecutionRecord:
-    FETCH_QUERY = "SELECT executionRecord.id, executionRecord.status, user1.id AS attackerUserId, sc1.language AS attackerLanguage, sc1.code AS attackerCode, user2.id AS defenderUserId, sc2.language AS defenderLanguage, sc2.code AS defenderCode FROM executionRecord, program AS p1 , program AS p2 , sourceCode AS sc1 , sourceCode AS sc2 , user AS user1 , user AS user2 WHERE executionRecord.attackerId = p1.id AND p1.id = sc1.programId AND executionRecord.defenderId = p2.id AND p2.id = sc2.programId AND p1.userId = user1.id AND p2.userId = user2.id AND executionRecord.id = %d"
+    FETCH_QUERY = "SELECT executionRecord.id, executionRecord.status, user1.id AS attackerUserId, sc1.language AS attackerLanguage, sc1.code AS attackerCode, user2.id AS defenderUserId, sc2.language AS defenderLanguage, sc2.code AS defenderCode FROM executionRecord, program AS p1 , program AS p2 , sourceCode AS sc1 , sourceCode AS sc2 , user AS user1 , user AS user2 WHERE executionRecord.attackerId = p1.id AND p1.id = sc1.programId AND executionRecord.defenderId = p2.id AND p2.id = sc2.programId AND p1.userId = user1.id AND p2.userId = user2.id AND executionRecord.id = %s"
     UPDATE_QUERY = "UPDATE executionRecord SET status = %s , winner = %s , replay = %s , log = %s WHERE id = %s"
+    UPDATE_STATUS_QUERY = "UPDATE executionRecord SET status = %s WHERE id = %s"
     STATUS_PENDING = 0
     STATUS_RUNNING = 1
     STATUS_FINISHED = 2
@@ -48,7 +49,7 @@ class ExecutionRecord:
             use_unicode=True
         )
         cur = self.connection.cursor()
-        cur.execute(self.FETCH_QUERY % program_id)
+        cur.execute(self.FETCH_QUERY, [program_id])
         result = cur.fetchone()
         cur.close()
         (self.id, self.status,
@@ -57,6 +58,13 @@ class ExecutionRecord:
         self.log = []
         self.winner = 0
         self.replay = []
+
+    def update_status(self, status):
+        self.status = status
+        cur = self.connection.cursor()
+        cur.execute(self.UPDATE_STATUS_QUERY, (self.status, self.id))
+        cur.close()
+        self.connection.commit()
 
     def attacker_wins(self):
         self.winner = self.WINNER_ATTACKER
@@ -196,6 +204,7 @@ def judge_by_id(program_id):
     record = ExecutionRecord(program_id)
     execution = Execution(record)
     try:
+        execution.record.update_status(ExecutionRecord.STATUS_RUNNING)
         execution.compile()
         execution.run_judge_client()
     except CompileErrorException:
