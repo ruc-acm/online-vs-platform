@@ -215,7 +215,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getFlagshipProgram()
     {
-        return $this->getPrograms()->orderBy(['stability' => 'DESC', 'lastCreated' => 'DESC'])->limit(1)->one();
+        return $this->getPrograms()->orderBy(['stability' => SORT_ASC, 'lastCreated' => SORT_DESC])->limit(1)->one();
     }
 
     /**
@@ -225,7 +225,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getLatestProgram()
     {
-        return $this->getPrograms()->orderBy(['lastCreated' => 'DESC'])->limit(1)->one();
+        return $this->getPrograms()->orderBy(['lastCreated' => SORT_DESC])->limit(1)->one();
     }
 
 
