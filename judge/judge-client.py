@@ -55,6 +55,8 @@ class Match:
         self.winner = winner
         print >> sys.stderr, "Competition ended and the winner is %s" % winner
         print >> sys.stderr, "Reason is %s" % self.reason
+        print winner
+        print self.reason
         attacker.kill_process()
         defender.kill_process()
         quit()
@@ -66,9 +68,9 @@ class Match:
         if return_code == 1:
             self.reason = "Finished"
         elif return_code == 2:
-            self.reason = "Illegal Movement"
+            self.reason = "IllegalMovement"
         elif return_code == 3:
-            self.reason = "Illegal Output"
+            self.reason = "IllegalOutput"
         else:
             self.reason = "Unknown"
 
