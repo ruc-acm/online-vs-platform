@@ -6,6 +6,7 @@ import random
 import string
 import codecs
 import shutil
+import sys
 
 import MySQLdb
 from redis import Redis
@@ -104,7 +105,7 @@ class Execution:
                      cwd=self.base_dir, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         output = proc.communicate(timeout=self.COMPILE_TIMEOUT)
         self.log += [str(output[1])]
-        if not proc.poll():
+        if proc.poll() is None:
             try:
                 self.log += ['Compile timeout.']
                 proc.kill()
@@ -136,7 +137,20 @@ class Execution:
             self.record.attacker_wins()
             raise e
 
+    def copy_assets(self):
+        if os.path.exists('./assets/'):
+            path = os.path.realpath('./assets/')
+            self.log += ['Copying assets files.']
+            for file in os.listdir(path):
+                file_path = os.path.join(path, file)
+                if os.path.isfile(file_path):
+                    target = os.path.join(self.base_dir, file)
+                    self.log += ['Copying ' + file_path + ' to ' + target]
+                    shutil.copyfile(file_path, target)
+                    self.log += ['Assets files copied.']
+
     def run_judge_client(self):
+        self.copy_assets()
         args = ["python", os.path.realpath('judge-client.py'), './attacker', './defender']
         self.log += ['Running: ' + ' '.join(args)]
         proc = Popen(args, cwd=self.base_dir, stdin=PIPE, stdout=PIPE, stderr=PIPE)
@@ -196,9 +210,13 @@ def judge_by_id(program_id):
 
 def run_daemon():
     redis = Redis()
-    to_do = redis.brpop(['judge_queue'])
-    program_id = to_do[1]
-    judge_by_id(int(program_id))
+    while True:
+        try:
+            to_do = redis.brpop(['judge_queue'])
+            program_id = to_do[1]
+            judge_by_id(int(program_id))
+        except Exception as e:
+            print >> sys.stderr, e
 
 
 os.environ['LANG'] = 'C'
