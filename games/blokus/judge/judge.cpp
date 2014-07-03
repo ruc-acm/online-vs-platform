@@ -266,6 +266,7 @@ int Judge::after_read(string line)
         this-> won = ((this -> player_name == "attacker")&&(Game -> victor == 1)) || ((this -> player_name == "defender")&&(Game -> victor == 2) );
         return 1;
     }
+    return 0;
 }
 
 int Judge::victorious()
