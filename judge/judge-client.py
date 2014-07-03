@@ -99,7 +99,7 @@ def run_step(attacker, attacker_judge, defender, defender_judge):
         attacker.start_timer()
         line = attacker.read_line()
         if not line:
-            if attacker.process.poll():
+            if attacker.process.poll() is not None:
                 raise Exception('Process ended.')
         attacker.stop_timer()
         result = attacker_judge.after_read(line.strip())
