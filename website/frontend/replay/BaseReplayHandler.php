@@ -11,18 +11,18 @@ use yii\base\Component;
 /**
  * Class BaseReplayHandler
  * @package frontend\replay
- * @property CompetitionController $controller
+ * @property CompetitionController $_controller
  */
 abstract class BaseReplayHandler extends Component
 {
     /**
      * @param CompetitionController $controller
      */
-    protected $controller;
+    protected $_controller;
 
     public function  __construct($controller)
     {
-        $this->controller = $controller;
+        $this->_controller = $controller;
     }
 
     /**
