@@ -38,23 +38,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'stability',
                         'enableSorting' => true,
                         'content' => function ($model) {
-                                $class = 'label-default';
+                                $class = 'default';
                                 $text = 'dev';
                                 switch ($model->stability) {
                                     case Program::STABILITY_STABLE:
-                                        $class = 'label-success';
+                                        $class = 'success';
                                         $text = 'stable';
                                         break;
                                     case Program::STABILITY_BETA:
-                                        $class = 'label-warning';
+                                        $class = 'warning';
                                         $text = 'beta';
                                         break;
                                     case Program::STABILITY_ALPHA:
-                                        $class = 'label-danger';
+                                        $class = 'danger';
                                         $text = 'alpha';
                                         break;
                                 }
-                                return '<span class="label ' . $class . '">' . $text . '</span>';
+                                return Html::a($text, ['stability', 'id' => $model->id], ['class' => "btn btn-$class btn-xs"]);
                             },
                     ],
                     'lastCreated',

@@ -8,8 +8,8 @@ use common\models\Program;
 use common\models\SourceCode;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
-use Yii;
 use yii\web\Controller;
+use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -89,4 +89,19 @@ class ProgramController extends Controller
         }
         return $this->render('view', ['model' => $program]);
     }
-} 
+
+    public function actionStability($id)
+    {
+        $program = Program::findOne($id);
+        if ($program == null) {
+            throw new NotFoundHttpException('The specific record could not be found.');
+        }
+        if ($program->userId != Yii::$app->user->identity->getId()) {
+            throw new ForbiddenHttpException('You can only view your own code.');
+        }
+        if ($program->load(Yii::$app->request->post()) && $program->save()) {
+            Yii::$app->session->setFlash('success', 'Successfully modified stability of ' . $program->name);
+        }
+        return $this->render('stability', ['model' => $program]);
+    }
+}

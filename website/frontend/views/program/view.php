@@ -9,7 +9,7 @@ use common\models\SourceCode;
 use yii\helpers\Html;
 
 $this->title = 'View AI - ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'My AI' , 'url' => ['index'] ];
+$this->params['breadcrumbs'][] = ['label' => 'My AI', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="program-index">
@@ -17,19 +17,19 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::encode($model->name); ?>
     </h1>
     <?php
-    $class = 'label-default';
+    $class = 'default';
     $text = 'dev';
     switch ($model->stability) {
         case Program::STABILITY_STABLE:
-            $class = 'label-success';
+            $class = 'success';
             $text = 'stable';
             break;
         case Program::STABILITY_BETA:
-            $class = 'label-warning';
+            $class = 'warning';
             $text = 'beta';
             break;
         case Program::STABILITY_ALPHA:
-            $class = 'label-danger';
+            $class = 'danger';
             $text = 'alpha';
             break;
     }
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <table class="table table-striped table-bordered">
         <tr>
             <td>Stability</td>
-            <td><span class="label <?= $class ?>"><?= $text ?></span></td>
+            <td><?= Html::a($text, ['stability', 'id' => $model->id], ['class' => "btn btn-$class btn-xs"]); ?></td>
         </tr>
         <tr>
             <td>Language</td>
