@@ -24,8 +24,7 @@ class Game extends ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'name', 'displayName'], 'required'],
-            [['id'], 'integer'],
+            [['name', 'displayName'], 'required'],
             [['name', 'displayName'], 'string', 'max' => 255]
         ];
     }
