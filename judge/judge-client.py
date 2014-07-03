@@ -72,7 +72,7 @@ class Match:
         elif return_code == 3:
             self.reason = "IllegalOutput"
         else:
-            self.reason = "Unknown"
+            self.reason = "Unknown(%d)"%return_code
 
     def crashed(self):
         self.reason = "Crashed"
@@ -107,6 +107,7 @@ def run_step(attacker, attacker_judge, defender, defender_judge):
             match.defeat(result)
             match.end(attacker_judge.player_name if attacker_judge.victorious() else defender_judge.player_name)
     except Exception as e:
+	print >> sys.stderr, e
         match.crashed() if attacker.process.returncode != -9 else match.time_limit_exceeded()
         match.end(defender_judge.player_name)
 
