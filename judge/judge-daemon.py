@@ -163,10 +163,10 @@ class Execution:
         self.log += ['Running: ' + ' '.join(args)]
         proc = Popen(args, cwd=self.base_dir, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         output = proc.communicate()
+        self.log += [str(output[1])]
         if proc.returncode:
             self.log += ["Judge client crashed with return code %d." % proc.returncode]
             raise JudgeClientException("judge client crashed.")
-        self.log += [str(output[1])]
         result = output[0].split('\n')
         winner = result[0]
         if winner == "attacker":
