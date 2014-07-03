@@ -185,7 +185,7 @@ class Execution:
             self.record.status = ExecutionRecord.STATUS_BAD_FORMAT
         elif reason == "TLE":
             self.record.status = ExecutionRecord.STATUS_TLE
-        elif reason == "Crash":
+        elif reason == "Crashed":
             self.record.status = ExecutionRecord.STATUS_RUNTIME_ERROR
         else:
             self.log += ["Judge client return unknown reason %s." % reason]
