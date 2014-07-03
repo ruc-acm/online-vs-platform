@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use common\models\ExecutionRecord;
+use common\models\Game;
 use common\models\User;
 use common\models\UserScore;
 use yii\filters\AccessControl;
@@ -93,7 +94,7 @@ class CompetitionController extends Controller
         }
     }
 
-    public function actionReplay($id)
+    public function actionReplay($id, $json = 0)
     {
         $record = ExecutionRecord::findOne($id);
         if ($record == null) {
@@ -106,6 +107,14 @@ class CompetitionController extends Controller
         if ($record->status != ExecutionRecord::STATUS_FINISHED) {
             Yii::$app->session->setFlash('error', 'This execution did not finish.');
             return $this->redirect(['status']);
+        }
+        $game = Game::findOne(1); //TODO Multi-game support
+        $className = '\frontend\replay\\' . ucfirst($game->name) . 'ReplayHandler';
+        $handler = new $className($this);
+        if ($json) {
+            return $handler->translateReplay($record);
+        } else {
+            return $handler->handleReplay($record);
         }
     }
 
