@@ -11,6 +11,10 @@ class m130524_201442_init extends \yii\db\Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
             $query = <<< 'EOD'
 
+SET FOREIGN_KEY_CHECKS=0;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
 CREATE TABLE IF NOT EXISTS executionRecord (
   id int(11) NOT NULL AUTO_INCREMENT,
   attackerId int(11) NOT NULL,
@@ -18,24 +22,12 @@ CREATE TABLE IF NOT EXISTS executionRecord (
   winner tinyint(4) NOT NULL DEFAULT '0',
   replay longtext,
   `status` int(11) NOT NULL DEFAULT '0',
+  log longtext,
+  submitted datetime NOT NULL,
   PRIMARY KEY (id),
   KEY attackerId (attackerId),
   KEY defenderId (defenderId)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
---
--- relation executionRecord:
---   attackerId
---       program -> id
---   defenderId
---       program -> id
---
-
--- --------------------------------------------------------
-
---
--- structure 'game'
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS game (
   id int(11) NOT NULL,
@@ -43,12 +35,6 @@ CREATE TABLE IF NOT EXISTS game (
   displayName varchar(255) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- structure 'program'
---
 
 CREATE TABLE IF NOT EXISTS program (
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -61,40 +47,14 @@ CREATE TABLE IF NOT EXISTS program (
   KEY userId (userId,gameId),
   KEY userId_2 (userId),
   KEY gameId (gameId)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
---
--- relation program:
---   userId
---       user -> id
---   gameId
---       game -> id
---
-
--- --------------------------------------------------------
-
---
--- structure 'sourceCode'
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS sourceCode (
   programId int(11) NOT NULL AUTO_INCREMENT,
   `language` int(11) NOT NULL,
   `code` longtext NOT NULL,
   PRIMARY KEY (programId)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
---
--- relation sourceCode:
---   programId
---       program -> id
---
-
--- --------------------------------------------------------
-
---
--- structure 'user'
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `user` (
   id int(11) NOT NULL AUTO_INCREMENT,
@@ -112,29 +72,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY username (username)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- structure 'userProfile'
---
-
 CREATE TABLE IF NOT EXISTS userProfile (
   userId int(11) NOT NULL,
   nickName varchar(255) DEFAULT NULL,
   PRIMARY KEY (userId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- relation userProfile:
---   userId
---       user -> id
---
-
--- --------------------------------------------------------
-
---
--- structure 'userScore'
---
 
 CREATE TABLE IF NOT EXISTS userScore (
   userId int(11) NOT NULL,
@@ -145,50 +87,27 @@ CREATE TABLE IF NOT EXISTS userScore (
   KEY gameId (gameId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- relation userScore:
---   userId
---       user -> id
---   gameId
---       game -> id
---
 
---
--- CONSTRAINTS
---
-
---
--- CONSTRAINT executionRecord
---
 ALTER TABLE executionRecord
   ADD CONSTRAINT executionRecord_ibfk_1 FOREIGN KEY (attackerId) REFERENCES program (id) ON DELETE CASCADE,
   ADD CONSTRAINT executionRecord_ibfk_2 FOREIGN KEY (defenderId) REFERENCES program (id) ON DELETE CASCADE;
 
---
--- CONSTRAINT program
---
 ALTER TABLE program
   ADD CONSTRAINT program_ibfk_1 FOREIGN KEY (userId) REFERENCES `user` (id) ON DELETE CASCADE,
   ADD CONSTRAINT program_ibfk_2 FOREIGN KEY (gameId) REFERENCES game (id) ON DELETE CASCADE;
 
---
--- CONSTRAINT sourceCode
---
 ALTER TABLE sourceCode
   ADD CONSTRAINT sourceCode_ibfk_1 FOREIGN KEY (programId) REFERENCES program (id) ON DELETE CASCADE;
 
---
--- CONSTRAINT userProfile
---
 ALTER TABLE userProfile
   ADD CONSTRAINT userProfile_ibfk_1 FOREIGN KEY (userId) REFERENCES `user` (id) ON DELETE CASCADE;
 
---
--- CONSTRAINT userScore
---
 ALTER TABLE userScore
   ADD CONSTRAINT userScore_ibfk_1 FOREIGN KEY (userId) REFERENCES `user` (id) ON DELETE CASCADE,
   ADD CONSTRAINT userScore_ibfk_2 FOREIGN KEY (gameId) REFERENCES game (id) ON DELETE CASCADE;
+SET FOREIGN_KEY_CHECKS=1;
+
+INSERT INTO game (name, displayName) VALUES ('blockus', 'Blockus');
 
 EOD;
             $this->execute($query);
