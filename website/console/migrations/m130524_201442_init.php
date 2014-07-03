@@ -139,7 +139,7 @@ EOD;
         }
         $this->dropTable('{{%user}}');
         $this->dropTable('{{%executionRecord}}');
-        $this->dropTable('{{%userScour}}');
+        $this->dropTable('{{%userScore}}');
         $this->dropTable('{{%userProfile}}');
         $this->dropTable('{{%sourceCode}}');
         $this->dropTable('{{%program}}');
