@@ -134,6 +134,9 @@ EOD;
 
     public function down()
     {
+        if ($this->db->driverName === 'mysql') {
+            $this->execute('SET FOREIGN_KEY_CHECKS=0;');
+        }
         $this->dropTable('{{%user}}');
         $this->dropTable('{{%executionRecord}}');
         $this->dropTable('{{%userScour}}');
@@ -141,5 +144,8 @@ EOD;
         $this->dropTable('{{%sourceCode}}');
         $this->dropTable('{{%program}}');
         $this->dropTable('{{%game}}');
+        if ($this->db->driverName === 'mysql') {
+            $this->execute('SET FOREIGN_KEY_CHECKS=1;');
+        }
     }
 }
