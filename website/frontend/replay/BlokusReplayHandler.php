@@ -31,13 +31,13 @@ class BlokusReplayHandler extends BaseReplayHandler
             if (!empty($line)) {
                 $item = explode(' ', $line);
                 $output[] = [
-                    'color' => $item[0],
-                    'chess' => $item[1],
-                    'x' => $item[2],
-                    'y' => $item[3],
-                    'rotate' => $item[4],
-                    'flipX' => $item[5],
-                    'flipY' => $item[6],
+                    'color' => (int) $item[0],
+                    'chess' => (int) $item[1],
+                    'x' => (int) $item[2],
+                    'y' => (int) $item[3],
+                    'rotate' => (int) $item[4],
+                    'flipX' => (int) $item[5],
+                    'flipY' => (int) $item[6],
                 ];
             }
         }
