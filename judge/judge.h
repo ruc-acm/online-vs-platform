@@ -20,3 +20,4 @@ class Judge
 		Judge(string name);
 };
 
+StrVector pull_replay();

@@ -1,25 +1,17 @@
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/socketvar.h>
-#include <sys/wait.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
 #include <algorithm>
-#include <pthread.h>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
 #include <boost/python/module.hpp>
 #include <boost/python/def.hpp>
 #include <boost/python/class.hpp>
 #include "judge.h"
 
-using namespace boost::python;
 using boost::python::list;
-
+using std::vector;
 
 char buf[200];
-
+vector<string> replay;
 struct program
 {
     char * file;
@@ -274,8 +266,17 @@ int Judge::victorious()
     return this->won;
 }
 
+StrVector pull_replay()
+{
+	list ret;
+	for (vector<string>::iterator it = replay.begin() ; it != replay.end() ; ++it)
+		ret.append(*it);
+	return ret;	
+}
+
 BOOST_PYTHON_MODULE(judge_ext)
 {
+    using namespace boost::python;
     class_<Judge>("Judge" , init<string>())
     .def("started", &Judge::started)
     .def("dead", &Judge::dead)

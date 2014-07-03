@@ -5,7 +5,7 @@ import sys
 
 from subprocess32 import Popen, PIPE
 
-from judge_ext import Judge
+from judge_ext import Judge, pull_replay
 
 
 class UserProgram:
@@ -59,6 +59,8 @@ class Match:
         print >> sys.stderr, "Reason is %s" % self.reason
         print winner
         print self.reason
+        if self.reason == "Finished":
+            print '\n'.join(pull_replay())
         attacker.kill_process()
         defender.kill_process()
         quit()
