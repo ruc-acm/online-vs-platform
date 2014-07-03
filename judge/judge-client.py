@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
-from subprocess32 import Popen, PIPE
 from threading import Timer
-from judge_ext import Judge
 import sys
+
+from subprocess32 import Popen, PIPE
+
+from judge_ext import Judge
 
 
 class UserProgram:
@@ -72,7 +74,7 @@ class Match:
         elif return_code == 3:
             self.reason = "IllegalOutput"
         else:
-            self.reason = "Unknown(%d)"%return_code
+            self.reason = "Unknown(%d)" % return_code
 
     def crashed(self):
         self.reason = "Crashed"
@@ -97,19 +99,19 @@ def run_step(attacker, attacker_judge, defender, defender_judge):
         for line in lines:
             print >> attacker.process.stdin, line
         attacker.start_timer()
-	try:
-        	line = attacker.read_line()
-	        if not line:
-        	    if attacker.process.poll() is not None:
-        	        raise Exception('Process ended.')
-	finally:
-        	attacker.stop_timer()
+        try:
+            line = attacker.read_line()
+            if not line:
+                if attacker.process.poll() is not None:
+                    raise Exception('Process ended with code %d.' % attacker.process.returncode)
+        finally:
+            attacker.stop_timer()
         result = attacker_judge.after_read(line.strip())
         if result:
             match.defeat(result)
             match.end(attacker_judge.player_name if attacker_judge.victorious() else defender_judge.player_name)
     except Exception as e:
-	print >> sys.stderr, e
+        print >> sys.stderr, e
         match.crashed() if attacker.process.returncode != -9 else match.time_limit_exceeded()
         match.end(defender_judge.player_name)
 
