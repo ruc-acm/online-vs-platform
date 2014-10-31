@@ -28,3 +28,7 @@ phpunit.phar
 
 # composer lock file
 composer.lock
+
+# composer vendor dir
+/vendor
+
