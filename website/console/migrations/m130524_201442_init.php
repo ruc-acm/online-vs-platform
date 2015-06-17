@@ -107,7 +107,7 @@ ALTER TABLE userScore
   ADD CONSTRAINT userScore_ibfk_2 FOREIGN KEY (gameId) REFERENCES game (id) ON DELETE CASCADE;
 SET FOREIGN_KEY_CHECKS=1;
 
-INSERT INTO game (name, displayName) VALUES ('blockus', 'Blockus');
+INSERT INTO game (name, displayName) VALUES ('blokus', 'Blokus');
 
 EOD;
             $this->execute($query);
