@@ -14,3 +14,5 @@ This part is used to put two player programs(namely attacker and defender) into 
 There is no sand-boxing mechanism. Using a kernel security module like AppArmor or SELinux is recommended.
 
 Note: To build the native judge library with `libboost-python`, please get a copy of boost and make a link to `/tmp/boost`, then run `bjam` in `judge` directory.
+
+Requirement: Please install following packages via `pip`: `mysql`, `redis`, `subprocess32`
