@@ -55,3 +55,14 @@ target/
 # PyCharm
 .idea
 
+# source file (copied elsewhere)
+judge.cpp
+*.ini
+
+# assets (copied elsewhere)
+assets/
+
+# binary
+*.so
+*.so.*
+
