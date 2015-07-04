@@ -102,7 +102,7 @@ struct board
 			addx = - addx;
 		};
 	}
-	bool isLawful(int ID,int x,int y,int block_id,int l,int v,int d)
+	bool isLegalful(int ID,int x,int y,int block_id,int l,int v,int d)
 	{
 		if (!block_id) return true;
 		if (ID < 1 || ID > 4) return false;
@@ -163,7 +163,8 @@ struct board
 	{
 		using std::stringstream;
 		stringstream ss(s);
-		return ss >> ID >> x >> y >> block_id >> l >> v >> d;
+		ss >> ID >> x >> y >> block_id >> l >> v >> d;
+		return ss.good();
 	}
 
 	static bool normalize_input(string &s) {
@@ -181,7 +182,7 @@ struct board
 	{
 		int ID,x,y,block_id,l,v,d;
 		board::parse_input(s, ID, x, y, block_id, l, v, d);
-		return isLawful(ID,x,y,block_id,l,v,d);
+		return isLegalful(ID,x,y,block_id,l,v,d);
 	}
 
 	void addGamebox(const string &s)
@@ -279,7 +280,12 @@ int Judge::after_read(string line)
 	if (Game -> over) return 1;
 	fprintf(stderr , "read from %s: %s\n" , this->player_name.c_str() , line.c_str());
 	if (!board::normalize_input(line))
+	{
+		Game -> victor = (this -> player_name == "attacker") ? 2 :1;
+		Game -> over = true;
+		fprintf(stderr , "game over due to %s.\n" , "illegal output");
 		return 3;
+	}
 	replay.push_back(line);
 	if (!Game -> judge_pass(line))
 	{
