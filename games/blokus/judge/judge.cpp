@@ -173,7 +173,7 @@ struct board
 			return false;
 		using std::stringstream;
 		stringstream ss;
-		ss << ID << ' ' << x << ' ' << y << ' ' << block_id << ' ' << l << ' ' << v << ' ' << d;
+		ss << ID << ' ' << x << ' ' << y << ' ' << block_id << ' ' << l << ' ' << v << ' ' << d << endl;
 		s = ss.str();
 		return true;
 	}
