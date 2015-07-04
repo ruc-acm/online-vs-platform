@@ -9,6 +9,7 @@
 
 using boost::python::list;
 using std::vector;
+using std::endl;
 
 vector<string> replay;
 struct program
