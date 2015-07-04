@@ -66,7 +66,7 @@ struct board
 				fscanf(data,"%d%d",&block[i].box[j].x,&block[i].box[j].y);
 		}
 		fclose(data);
-		this->last_command = "0 0 0 0 0 0 0";
+		this->last_command = "0 0 0 0 0 0 0\n";
 		time_t tim;
 		time(&tim);
 		struct tm * place = localtime(&tim);
