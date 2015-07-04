@@ -104,8 +104,8 @@ struct board
 	}
 	bool isLegalful(int ID,int x,int y,int block_id,int l,int v,int d)
 	{
-		if (!block_id) return true;
 		if (ID < 1 || ID > 4) return false;
+		if (!block_id) return true;		
 		if (this -> last_move == 4 && ID != 1) return false;
 		if (this -> last_move <  4 && ID != this -> last_move +1) return false;
 		if (outIt(x,y)) return false;
