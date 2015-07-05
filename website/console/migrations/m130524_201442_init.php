@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 CREATE TABLE IF NOT EXISTS userProfile (
   userId int(11) NOT NULL,
   nickName varchar(255) DEFAULT NULL,
+  `class` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (userId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

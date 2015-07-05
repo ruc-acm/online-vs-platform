@@ -10,7 +10,7 @@ use yii\db\ActiveRecord;
  *
  * @property integer $userId
  * @property string $nickName
- *
+ * @property integer $class
  * @property User $user
  */
 class UserProfile extends ActiveRecord
