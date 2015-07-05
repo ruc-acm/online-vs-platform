@@ -69,6 +69,12 @@ class ProgramController extends Controller
 
                 $code->programId = $program->id;
                 if ($code->load(Yii::$app->request->post()) && $code->save()) {
+                    /* reward 1 point if score is zero. */
+                    $score = Yii::$app->user->identity->getScore()->one();
+                    if ($score->rating == 0) {
+                        $score->rating = 1;
+                        $score->update();
+                    }
                     $transaction->commit();
                     return $this->redirect(['index']);
                 }
