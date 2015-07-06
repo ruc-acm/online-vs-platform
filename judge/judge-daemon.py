@@ -106,7 +106,7 @@ class Execution:
         shutil.rmtree(self.base_dir, ignore_errors=True)
 
     def run_compiler(self, language, filename, executable_name):
-        args = ["g++" if language else "gcc", "-static", "-O2", "-Wall", filename, "-o",
+        args = ["g++" if language else "gcc", "-static", "-O2", filename, "-o",
                 executable_name]
         self.log += ['Running: ' + ' '.join(args)]
         proc = Popen(args,
