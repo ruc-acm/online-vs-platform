@@ -136,7 +136,7 @@ class Execution:
             raise e
         try:
             defender_code_path = os.path.join(self.base_dir,
-                                              'defender' + random_string() + ('.cpp' if self.record.attacker_lang else '.c'))
+                                              'defender-' + random_string() + ('.cpp' if self.record.attacker_lang else '.c'))
             defender_code_file = codecs.open(defender_code_path, 'w', 'utf-8')
             defender_code_file.write(self.record.defender_code)
             defender_code_file.close()
