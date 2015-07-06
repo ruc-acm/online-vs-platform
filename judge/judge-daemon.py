@@ -126,7 +126,7 @@ class Execution:
     def compile(self):
         try:
             attacker_code_path = os.path.join(self.base_dir,
-                                              'attacker' + ('.cpp' if self.record.attacker_lang else '.c'))
+                                              'attacker-' + random_string() + ('.cpp' if self.record.attacker_lang else '.c'))
             attacker_code_file = codecs.open(attacker_code_path, 'w', 'utf8')
             attacker_code_file.write(self.record.attacker_code)
             attacker_code_file.close()
@@ -136,7 +136,7 @@ class Execution:
             raise e
         try:
             defender_code_path = os.path.join(self.base_dir,
-                                              'defender' + ('.cpp' if self.record.attacker_lang else '.c'))
+                                              'defender' + random_string() + ('.cpp' if self.record.attacker_lang else '.c'))
             defender_code_file = codecs.open(defender_code_path, 'w', 'utf-8')
             defender_code_file.write(self.record.defender_code)
             defender_code_file.close()
