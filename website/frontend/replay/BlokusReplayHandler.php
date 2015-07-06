@@ -15,6 +15,7 @@ class BlokusReplayHandler extends BaseReplayHandler
      */
     public function translateReplay($record)
     {
+        Yii::$app->response->headers->set('Access-Control-Allow-Origin', '*');
         $replay = explode(PHP_EOL, $record->replay);
         $output = [];
         $output[] = [
