@@ -51,6 +51,6 @@ class BlokusReplayHandler extends BaseReplayHandler
     {
         $id = $record->id;
         $url = "http://www.nddtf.com/html/chess.html?id=$id";
-        return $this->_controller->render('@frontend/replay/views/blokus/replay', ['model' => $record]);
+        return $this->_controller->render('@frontend/replay/views/blokus/replay', ['model' => $record , 'url' => $url]);
     }
 }
