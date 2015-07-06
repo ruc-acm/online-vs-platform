@@ -35,9 +35,9 @@ class BlokusReplayHandler extends BaseReplayHandler
                     'x' => (int)$item[1],
                     'y' => (int)$item[2],
                     'chess' => (int)$item[3],
-                    'rotate' => (int)$item[4],
-                    'flipX' => (int)$item[5],
-                    'flipY' => (int)$item[6],
+                    'flipX' => (int)$item[4],
+                    'flipY' => (int)$item[5],
+                    'rotate' => (int)$item[6],
                 ];
             }
         }
