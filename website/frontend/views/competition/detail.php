@@ -129,5 +129,5 @@ function statusDisplay($model)
         </tr>
     </table>
 <pre>
-<?= $model->log ?>
+<?= Html::encode($model->log) ?>
 </pre>
