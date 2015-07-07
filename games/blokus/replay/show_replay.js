@@ -203,7 +203,7 @@ $(document).ready(function(){
 				type:"get",
 				timeout:5000, 
 				success:function(data){				 
-				    gotJson = JSON.parse(data);
+				    	gotJson = data;
 					name1 = gotJson[0].name[0];
 					name2 = gotJson[0].name[1];
 					shapeJson = eval('(' + shape + ')');
