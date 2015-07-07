@@ -92,6 +92,7 @@ function init_board(){
 	target.append("<button class=\"btn btn-primary \" onclick=\"next()\">next</button>");
 	freshStep();
 	freshScore();
+	target.find('div').css('box-sizing', 'content-box');
 }
 
 function changeColor(x,y,c){
