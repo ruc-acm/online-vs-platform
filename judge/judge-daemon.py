@@ -7,9 +7,9 @@ import string
 import codecs
 import shutil
 import sys
-
 import MySQLdb
 from redis import Redis
+
 from subprocess32 import Popen, PIPE
 
 
@@ -22,9 +22,18 @@ class JudgeClientException(Exception):
 
 
 class ExecutionRecord:
-    FETCH_QUERY = "SELECT executionRecord.id, executionRecord.status, user1.id AS attackerUserId, sc1.language AS attackerLanguage, sc1.code AS attackerCode, user2.id AS defenderUserId, sc2.language AS defenderLanguage, sc2.code AS defenderCode FROM executionRecord, program AS p1 , program AS p2 , sourceCode AS sc1 , sourceCode AS sc2 , user AS user1 , user AS user2 WHERE executionRecord.attackerId = p1.id AND p1.id = sc1.programId AND executionRecord.defenderId = p2.id AND p2.id = sc2.programId AND p1.userId = user1.id AND p2.userId = user2.id AND executionRecord.id = %s"
+    FETCH_QUERY = "SELECT executionRecord.id, executionRecord.status, user1.id AS attackerUserId, sc1.language AS attackerLanguage, sc1.code AS attackerCode, user2.id AS defenderUserId, sc2.language AS defenderLanguage, sc2.code AS defenderCode , attackerId, defenderId FROM executionRecord, program AS p1 , program AS p2 , sourceCode AS sc1 , sourceCode AS sc2 , user AS user1 , user AS user2 WHERE executionRecord.attackerId = p1.id AND p1.id = sc1.programId AND executionRecord.defenderId = p2.id AND p2.id = sc2.programId AND p1.userId = user1.id AND p2.userId = user2.id AND executionRecord.id = %s"
     UPDATE_QUERY = "UPDATE executionRecord SET status = %s , winner = %s , replay = %s , log = %s WHERE id = %s"
     UPDATE_STATUS_QUERY = "UPDATE executionRecord SET status = %s WHERE id = %s"
+
+    TRANSACTION_BEGIN_QUERY = "BEGIN TRANSACTION"
+    TRANSACTION_COMMIT_QUERY = "COMMIT"
+
+    GET_MAX_SCORE_QUERY = "SELECT MAX(rating) FROM userScore"
+    GET_USER_SCORE_QUERY = "SELECT rating FROM userScore WHERE userId = %s FOR UPDATE"
+    CHECK_EXISTENT_QUERY = 'SELECT COUNT(*) FROM executionRecord, program WHERE defenderId = %s AND attackerId = program.id AND program.userId = %s AND winner = 1 AND status <> 7'
+    UPDATE_USER_SCORE_QUERY = "UPDATE userScore SET rating = rating + (%s) WHERE userId = %s"
+
     STATUS_PENDING = 0
     STATUS_RUNNING = 1
     STATUS_FINISHED = 2
@@ -54,7 +63,8 @@ class ExecutionRecord:
         cur.close()
         (self.id, self.status,
          self.attacker_id, self.attacker_lang, self.attacker_code,
-         self.defender_id, self.defender_lang, self.defender_code) = result
+         self.defender_id, self.defender_lang, self.defender_code, self.attacker_program_id,
+         self.defender_program_id) = result
         self.log = []
         self.winner = 0
         self.replay = []
@@ -71,6 +81,24 @@ class ExecutionRecord:
 
     def defender_wins(self):
         self.winner = self.WINNER_DEFENDER
+
+    def ranking_change(self):
+        if self.winner == self.WINNER_ATTACKER and self.status != ExecutionRecord.STATUS_COMPILE_ERROR:  # we don't count on compile errors
+            cur = self.connection.cursor()
+            cur.execute(self.CHECK_EXISTENT_QUERY, (self.defender_program_id, self.attacker_id,))
+            result = cur.fetchone()
+            if not result[0]:
+                cur.execute(self.GET_USER_SCORE_QUERY, (self.attacker_id,))
+                attacker_score = cur.fetchone()[0]
+                cur.execute(self.GET_USER_SCORE_QUERY, (self.defender_id,))
+                defender_score = cur.fetchone()[0]
+                cur.execute(self.GET_MAX_SCORE_QUERY)
+                max_score = cur.fetchone()[0]
+                delta = min(((attacker_score - defender_score) / (1.0 * max_score)) ** 2, max_score / 4.0)
+                delta = max(1, delta)
+                cur.execute(self.UPDATE_USER_SCORE_QUERY, (delta, self.attacker_id,))
+                cur.commit()
+            cur.close()
 
     def save_to_database(self):
         cur = self.connection.cursor()
@@ -214,6 +242,7 @@ def judge_by_id(program_id):
         execution.record.status = ExecutionRecord.STATUS_INTERNAL_ERROR
         execution.log += ['Exception caught in judge daemon.', e.message]
     finally:
+        execution.record.ranking_change()
         execution.save_to_database()
 
 
