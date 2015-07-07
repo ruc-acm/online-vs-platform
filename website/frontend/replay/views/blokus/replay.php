@@ -19,3 +19,4 @@ $this->params['breadcrumbs'][] = $this->title;
     <a href="<?= $url ?>" class="btn btn-danger">I understand, please let me see it.</a>
     <button onclick="history.back();" class="btn btn-primary">No, let me back.</button>
 </div>
+<script src="js/show_replay.js" ></script>
