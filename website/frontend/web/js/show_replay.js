@@ -1,0 +1,1 @@
+../../../../games/blokus/replay/show_replay.js
