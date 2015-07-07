@@ -31,7 +31,7 @@ class ExecutionRecord:
 
     GET_MAX_SCORE_QUERY = "SELECT MAX(rating) FROM userScore"
     GET_USER_SCORE_QUERY = "SELECT rating FROM userScore WHERE userId = %s FOR UPDATE"
-    CHECK_EXISTENT_QUERY = 'SELECT COUNT(*) FROM executionRecord, program WHERE defenderId = %s AND attackerId = program.id AND program.userId = %s AND winner = 1 AND status <> 7'
+    CHECK_EXISTENT_QUERY = 'SELECT COUNT(*) FROM executionRecord, program WHERE executionRecord.id <> %s AND defenderId = %s AND attackerId = program.id AND program.userId = %s AND winner = 1 AND status <> 7'
     UPDATE_USER_SCORE_QUERY = "UPDATE userScore SET rating = rating + (%s) WHERE userId = %s"
 
     STATUS_PENDING = 0
@@ -85,7 +85,7 @@ class ExecutionRecord:
     def ranking_change(self):
         if self.winner == self.WINNER_ATTACKER and self.status != ExecutionRecord.STATUS_COMPILE_ERROR:  # we don't count on compile errors
             cur = self.connection.cursor()
-            cur.execute(self.CHECK_EXISTENT_QUERY, (self.defender_program_id, self.attacker_id,))
+            cur.execute(self.CHECK_EXISTENT_QUERY, (self.id, self.defender_program_id, self.attacker_id,))
             result = cur.fetchone()
             if not result[0]:
                 cur.execute(self.GET_USER_SCORE_QUERY, (self.attacker_id,))
@@ -97,7 +97,6 @@ class ExecutionRecord:
                 delta = min(((attacker_score - defender_score) / (1.0 * max_score)) ** 2, max_score / 4.0)
                 delta = max(1, delta)
                 cur.execute(self.UPDATE_USER_SCORE_QUERY, (delta, self.attacker_id,))
-                cur.commit()
             cur.close()
 
     def save_to_database(self):
