@@ -8,6 +8,8 @@ var shapeJson;
 var score1 = 0;
 var score2 = 0;
 
+var target = $('replay-container');
+
 function getUrlParam(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); 
             var r = window.location.search.substr(1).match(reg);  
@@ -15,7 +17,7 @@ function getUrlParam(name) {
 }
 
 function push_alert(str){
-	$("body").before("<div class=\"alert alert-warning alert-dismissable\">" + "</div>");
+	target.before("<div class=\"alert alert-warning alert-dismissable\">" + "</div>");
 	$(".alert").last().append("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>" + str);
 }
 
@@ -39,7 +41,7 @@ function freshScore(){
 }
 
 function init_board(){
-	$("body").append("<div class=\"board\"></div>");
+	target.append("<div class=\"board\"></div>");
 	for (var i = 1;i <= 20;++i)
 	{
 		$(".board").append("<div class=\"row\" id=\"r" + i + "\"></div>");
@@ -86,8 +88,8 @@ function init_board(){
 			"float":"left",
 			"border":"1px dashed black"
 	});
-	$("body").append("<button class=\"btn btn-primary \" onclick=\"pre()\">pre</button>");
-	$("body").append("<button class=\"btn btn-primary \" onclick=\"next()\">next</button>");
+	target.append("<button class=\"btn btn-primary \" onclick=\"pre()\">pre</button>");
+	target.append("<button class=\"btn btn-primary \" onclick=\"next()\">next</button>");
 	freshStep();
 	freshScore();
 }
