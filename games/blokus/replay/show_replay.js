@@ -8,7 +8,7 @@ var shapeJson;
 var score1 = 0;
 var score2 = 0;
 
-var target = $('replay-container');
+var target = $('#replay-container');
 
 function getUrlParam(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); 
