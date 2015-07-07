@@ -9,6 +9,12 @@ $this->title = 'Replay - #' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Status', 'url' => ['competition/status']];
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile('js/show_replay.js', ['depends' => ['frontend\assets\AppAsset']]);
+$this->registerCss(<<< EOF
+    .board .row {
+        margin: 0;
+    }
+EOF
+)
 ?>
 <div class="competition-replay-<?= $model->id ?>">
     <div id="replay-container"></div>
