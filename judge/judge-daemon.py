@@ -257,5 +257,5 @@ def run_daemon():
 
 
 os.environ['LANG'] = 'C'
-os.environ['LD_LIBRARY_PATH'] = os.path.curdir
+os.environ['LD_LIBRARY_PATH'] = os.path.realpath(os.path.curdir)
 run_daemon()
