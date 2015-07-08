@@ -18,5 +18,7 @@ EOF
 ?>
 <div class="competition-replay-<?= $model->id ?>">
     <div id="replay-container"></div>
-    <a href="<?= $url ?>" class="btn btn-danger">Go to external replay player.</a>
+    <div>
+        <a href="<?= $url ?>" class="btn btn-danger" style="margin-top: 10px">Go to external replay player.</a>
+    </div>
 </div>
