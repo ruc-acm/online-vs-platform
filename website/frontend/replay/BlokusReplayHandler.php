@@ -24,7 +24,8 @@ class BlokusReplayHandler extends BaseReplayHandler
                 $record->defender->user->profile->nickName,
                 $record->attacker->user->profile->nickName,
                 $record->defender->user->profile->nickName,
-            ]
+            ],
+            'status' => $record->status,
         ];
         foreach ($replay as $raw_line) {
             $line = trim($raw_line);

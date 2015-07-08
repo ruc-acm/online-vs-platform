@@ -59,8 +59,7 @@ class Match:
         print >> sys.stderr, "Reason is %s" % self.reason
         print winner
         print self.reason
-        if self.reason == "Finished":
-            print '\n'.join(pull_replay())
+        print '\n'.join(pull_replay())
         attacker.kill_process()
         defender.kill_process()
         quit()
