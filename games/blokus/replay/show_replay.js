@@ -202,7 +202,7 @@ $(document).ready(function(){
 	var id = getUrlParam('id');
 	
 	$.ajax({
-				url:"http://ovs.indeed.moe/index.php?r=competition%2Freplay&id=" + id + "&json=1",
+				url:"/index.php?r=competition%2Freplay&id=" + id + "&json=1",
 				type:"get",
 				timeout:5000, 
 				success:function(data){				 
