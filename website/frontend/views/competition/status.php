@@ -2,6 +2,7 @@
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
+ * @var int $mine
  */
 use common\models\ExecutionRecord;
 use yii\grid\Column;
@@ -15,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="competition-status">
     <h1><?= Html::encode($this->title) ?></h1>
+    <?= Html::a($mine ? 'Show All' : 'Show Only Mine', $mine ? ['status'] : ['status', 'mine' => !$mine], ['class' => 'btn btn-default']) ?>
     <?=
     GridView::widget(
         [

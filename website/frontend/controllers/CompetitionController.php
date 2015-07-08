@@ -5,13 +5,13 @@ use common\models\ExecutionRecord;
 use common\models\Game;
 use common\models\User;
 use common\models\UserScore;
+use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\redis\Connection;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use Yii;
-use yii\data\ActiveDataProvider;
 
 class CompetitionController extends Controller
 {
@@ -51,13 +51,24 @@ class CompetitionController extends Controller
         return $this->render('index', ['dataProvider' => $dataProvider]);
     }
 
-    public function actionStatus()
+    public function actionStatus($mine = 0)
     {
+        $query = ExecutionRecord::find()->with(['attacker.user.profile', 'defender.user.profile']);
+        if ($mine)
+        {
+            $user = Yii::$app->user->identity;
+            $programs = $user->getPrograms()->select(['id'])->asArray()->all();
+            $ids = [];
+            foreach ($programs as $program)
+                $ids[] = $program['id'];
+            $query->where(['attackerId' => $ids])->orWhere(['defenderId' => $ids]);
+        }
+
         $dataProvider = new ActiveDataProvider([
-            'query' => ExecutionRecord::find()->with(['attacker.user.profile', 'defender.user.profile']),
+            'query' => $query,
             'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
         ]);
-        return $this->render('status', ['dataProvider' => $dataProvider]);
+        return $this->render('status', ['dataProvider' => $dataProvider , 'mine' => $mine]);
     }
 
     public function actionCompete($id)
