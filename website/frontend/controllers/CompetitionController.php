@@ -115,10 +115,6 @@ class CompetitionController extends Controller
             Yii::$app->session->setFlash('warning', 'Please come back later');
             return $this->redirect(['status']);
         }
-        if ($record->status != ExecutionRecord::STATUS_FINISHED) {
-            Yii::$app->session->setFlash('error', 'This execution did not finish.');
-            return $this->redirect(['status']);
-        }
         $game = Game::findOne(1); //TODO Multi-game support
         $className = '\frontend\replay\\' . ucfirst($game->name) . 'ReplayHandler';
         $handler = new $className($this);
