@@ -22,7 +22,7 @@ class JudgeClientException(Exception):
 
 
 class ExecutionRecord:
-    FETCH_QUERY = "SELECT executionRecord.id, executionRecord.status, user1.id AS attackerUserId, sc1.language AS attackerLanguage, sc1.code AS attackerCode, user2.id AS defenderUserId, sc2.language AS defenderLanguage, sc2.code AS defenderCode , attackerId, defenderId FROM executionRecord, program AS p1 , program AS p2 , sourceCode AS sc1 , sourceCode AS sc2 , user AS user1 , user AS user2 WHERE executionRecord.attackerId = p1.id AND p1.id = sc1.programId AND executionRecord.defenderId = p2.id AND p2.id = sc2.programId AND p1.userId = user1.id AND p2.userId = user2.id AND executionRecord.id = %s"
+    FETCH_QUERY = "SELECT executionRecord.id, executionRecord.status, user1.id AS attackerUserId, sc1.language AS attackerLanguage, sc1.code AS attackerCode, user2.id AS defenderUserId, sc2.language AS defenderLanguage, sc2.code AS defenderCode , attackerId, defenderId , executionRecord.tag AS tag FROM executionRecord, program AS p1 , program AS p2 , sourceCode AS sc1 , sourceCode AS sc2 , user AS user1 , user AS user2 WHERE executionRecord.attackerId = p1.id AND p1.id = sc1.programId AND executionRecord.defenderId = p2.id AND p2.id = sc2.programId AND p1.userId = user1.id AND p2.userId = user2.id AND executionRecord.id = %s"
     UPDATE_QUERY = "UPDATE executionRecord SET status = %s , winner = %s , replay = %s , log = %s WHERE id = %s"
     UPDATE_STATUS_QUERY = "UPDATE executionRecord SET status = %s WHERE id = %s"
 
@@ -64,7 +64,7 @@ class ExecutionRecord:
         (self.id, self.status,
          self.attacker_id, self.attacker_lang, self.attacker_code,
          self.defender_id, self.defender_lang, self.defender_code, self.attacker_program_id,
-         self.defender_program_id) = result
+         self.defender_program_id, self.tag) = result
         self.log = []
         self.winner = 0
         self.replay = []

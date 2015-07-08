@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS executionRecord (
   `status` int(11) NOT NULL DEFAULT '0',
   log longtext,
   submitted datetime NOT NULL,
+  `tag` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (id),
   KEY attackerId (attackerId),
   KEY defenderId (defenderId)
