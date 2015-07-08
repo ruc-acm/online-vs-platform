@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="competition-status">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= Html::a($mine ? 'Show All' : 'Show Only Mine', $mine ? ['status'] : ['status', 'mine' => !$mine], ['class' => 'btn btn-default']) ?>
+    <?= Html::a($mine ? 'Show All' : 'Show Only Mine', $mine ? ['status'] : ['status', 'mine' => !$mine], ['class' => 'btn btn-primary']) ?>
     <?=
     GridView::widget(
         [
