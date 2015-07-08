@@ -165,7 +165,7 @@ struct board
 		using std::stringstream;
 		stringstream ss(s);
 		ss >> ID >> x >> y >> block_id >> l >> v >> d;
-		return !ss.bad();
+		return ss;
 	}
 
 	static bool normalize_input(string &s) {
