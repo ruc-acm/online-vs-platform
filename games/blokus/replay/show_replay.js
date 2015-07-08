@@ -7,6 +7,8 @@ var shape = '[ [{"num":1},{"x":0,"y":0}],[{"num":2},{"x":0,"y":0},{"x":0,"y":1}]
 var shapeJson;
 var score1 = 0;
 var score2 = 0;
+var automatic = 0;
+var intervalObj = -1;
 
 var target = $('#replay-container');
 
@@ -17,6 +19,7 @@ function getUrlParam(name) {
 }
 
 function push_alert(str){
+	$(".alert").remove();
 	target.before("<div class=\"alert alert-warning alert-dismissable\">" + "</div>");
 	$(".alert").last().append("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>" + str);
 }
@@ -67,6 +70,7 @@ function init_board(){
 				"height":"20px",
 				"width":"20px",
 				"float":"left",
+				"backgroundColor":"white",
 				"border":"1px solid black"
 			});
 	});
@@ -90,13 +94,24 @@ function init_board(){
 	});
 	target.append("<button class=\"btn btn-primary \" onclick=\"pre()\">pre</button>");
 	target.append("<button class=\"btn btn-primary \" onclick=\"next()\">next</button>");
+	target.append("<button class=\"btn btn-primary \" style=\"margin-left:40px\" onclick=\"autoReplay()\">auto</button>");
 	freshStep();
 	freshScore();
 	target.find('div').css('box-sizing', 'content-box');
 }
 
-function changeColor(x,y,c){
-	$("#" + "r" + y + "c" + x).css("backgroundColor",c);
+function changeColor(x,y,c,func){
+	var obj = $("#" + "r" + y + "c" + x);
+	if (func == "update" && !obj.length) {
+		push_alert("Out of the board");
+		return;
+	}
+	if (!obj.length) return;
+	if (func == "update" && obj.css("backgroundColor") != "rgb(255, 255, 255)"){
+		push_alert("Cover the someone\'s block");
+		c = "#FF00FF";
+	}
+	obj.css("backgroundColor",c);
 }
 
 function getColor(c){
@@ -110,6 +125,7 @@ function getColor(c){
 }
 
 function pre(){
+	if (automatic) autoReplay();
 	if (step == 0) return;
 	if (step > gotJson.length - 1){
 		step--;
@@ -151,13 +167,16 @@ function pre(){
 					 break;
 			default : break;
 		}
-		changeColor(x0 + x,y0 + y,"white");
+		changeColor(x0 + x,y0 + y,"white","clear");
 	}
 	freshScore();
 }
 
 function next(){
-	if (step == gotJson.length - 1) return;
+	if (step == gotJson.length - 1) {
+		if (automatic) autoReplay();
+		return;
+	}
 	step++;
 	freshStep();
 	var stepJson = gotJson[step];
@@ -193,9 +212,17 @@ function next(){
 					 break;
 			default : break;
 		}
-		changeColor(x0 + x,y0 + y,getColor(stepJson.color));
+		changeColor(x0 + x,y0 + y,getColor(stepJson.color),"update");
 	}	
 	freshScore();
+}
+
+function autoReplay(){
+	if (!automatic)
+		intervalObj = setInterval("next()",500);
+	else
+		clearInterval(intervalObj);
+	automatic = 1 - automatic;
 }
 
 $(document).ready(function(){

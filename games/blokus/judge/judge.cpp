@@ -103,7 +103,7 @@ struct board
 			addx = - addx;
 		};
 	}
-	bool isLegalful(int ID,int x,int y,int block_id,int l,int v,int d)
+	bool isLegal(int ID,int x,int y,int block_id,int l,int v,int d)
 	{
 		if (ID < 1 || ID > 4) return false;
 		if (!block_id) return true;		
@@ -183,7 +183,7 @@ struct board
 	{
 		int ID,x,y,block_id,l,v,d;
 		board::parse_input(s, ID, x, y, block_id, l, v, d);
-		return isLegalful(ID,x,y,block_id,l,v,d);
+		return isLegal(ID,x,y,block_id,l,v,d);
 	}
 
 	void addGamebox(const string &s)
