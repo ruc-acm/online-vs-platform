@@ -51,9 +51,12 @@ class CompetitionController extends Controller
         return $this->render('index', ['dataProvider' => $dataProvider]);
     }
 
-    public function actionStatus($mine = 0)
+    public function actionStatus($mine = 0, $tag = null)
     {
         $query = ExecutionRecord::find()->with(['attacker.user.profile', 'defender.user.profile']);
+        if ($tag) {
+            $query->where(['tag' => $tag]);
+        }
         if ($mine)
         {
             $user = Yii::$app->user->identity;
