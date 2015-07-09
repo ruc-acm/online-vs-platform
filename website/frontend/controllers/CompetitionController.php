@@ -11,6 +11,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\redis\Connection;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 class CompetitionController extends Controller
@@ -60,6 +61,8 @@ class CompetitionController extends Controller
         if ($mine)
         {
             $user = Yii::$app->user->identity;
+            if ($user == null)
+                throw new ForbiddenHttpException('You did not sign in.');
             $programs = $user->getPrograms()->select(['id'])->asArray()->all();
             $ids = [];
             foreach ($programs as $program)
