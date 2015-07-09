@@ -19,6 +19,7 @@ use Yii;
  * @property string $log
  * @property Program $defender
  * @property Program $attacker
+ * @property string $tag
  */
 class ExecutionRecord extends ActiveRecord
 {
