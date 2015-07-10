@@ -249,7 +249,7 @@ def run_daemon():
     redis = Redis()
     while True:
         try:
-            to_do = redis.brpop(['judge_queue'])
+            to_do = redis.blpop(['judge_queue'])
             program_id = to_do[1]
             judge_by_id(int(program_id))
         except Exception as e:
